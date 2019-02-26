@@ -1,60 +1,19 @@
+import "./login.css";
+
 import React from "react";
-import styled from "styled-components";
-import { BaseContainer } from "../../helpers/layout";
-import { getDomain } from "../../helpers/getDomain";
-import User from "../shared/models/User";
 import { withRouter } from "react-router-dom";
+
+import { BaseContainer } from "../../helpers/layout";
+import DataService from "../../services/HttpService";
 import { Button } from "../../views/design/Button";
-
-const FormContainer = styled.div`
-  margin-top: 2em;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 300px;
-  justify-content: center;
-`;
-
-const Form = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 60%;
-  height: 375px;
-  font-size: 16px;
-  font-weight: 300;
-  padding-left: 37px;
-  padding-right: 37px;
-  border-radius: 5px;
-  background: linear-gradient(rgb(27, 124, 186), rgb(2, 46, 101));
-  transition: opacity 0.5s ease, transform 0.5s ease;
-`;
-
-const InputField = styled.input`
-  &::placeholder {
-    color: rgba(255, 255, 255, 0.2);
-  }
-  height: 35px;
-  padding-left: 15px;
-  margin-left: -4px;
-  border: none;
-  border-radius: 20px;
-  margin-bottom: 20px;
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-`;
-
-const Label = styled.label`
-  color: white;
-  margin-bottom: 10px;
-  text-transform: uppercase;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-`;
+import {
+  ButtonContainer,
+  Form,
+  FormContainer,
+  InputField,
+  Label
+} from "../../views/design/Form";
+import User from "../shared/models/User";
 
 /**
  * Classes in React allow you to have an internal state within the class and to have the React life-cycle for your component.
@@ -84,19 +43,12 @@ class Login extends React.Component {
    * If the request is successful, a new user is returned to the front-end and its token is stored in the localStorage.
    */
   login() {
-    fetch(`${getDomain()}/users`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        username: this.state.username,
-        name: this.state.name
-      })
+    DataService.postRequest("/users", {
+      username: this.state.username,
+      name: this.state.name
     })
-      .then(response => response.json())
       .then(returnedUser => {
-        const user = new User(returnedUser);
+        const user = new User(returnedUser.json());
         // store the token into the local storage
         localStorage.setItem("token", user.token);
         // user login successfully worked --> navigate to the route /game in the GameRouter
@@ -109,6 +61,10 @@ class Login extends React.Component {
           alert(`Something went wrong during the login: ${err.message}`);
         }
       });
+  }
+
+  signUp() {
+    this.props.history.push("/sign-up");
   }
 
   /**
@@ -159,6 +115,15 @@ class Login extends React.Component {
                 }}
               >
                 Login
+              </Button>
+              <Button
+                className="sign-up-button"
+                width="50%"
+                onClick={() => {
+                  this.signUp();
+                }}
+              >
+                Sign Up
               </Button>
             </ButtonContainer>
           </Form>
