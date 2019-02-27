@@ -1,6 +1,7 @@
 import "./signUp.css";
 
-import React, { Component } from "react";
+import React from "react";
+import { withRouter } from "react-router-dom";
 
 import { BaseContainer } from "../../helpers/layout";
 import DataService from "../../services/HttpService";
@@ -13,13 +14,17 @@ import {
   Label
 } from "../../views/design/Form";
 
-class SignUp extends Component {
-  state = {
-    username: null,
-    password: null,
-    passwordRepeat: null,
-    passwordNotIdentical: false
-  };
+class SignUp extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      name: "",
+      username: "",
+      password: "",
+      passwordRepeat: "",
+      passwordNotIdentical: false
+    };
+  }
 
   handleInputChange(key, value) {
     this.setState({ [key]: value });
@@ -31,12 +36,30 @@ class SignUp extends Component {
       this.setState({ password: "" });
       this.setState({ passwordRepeat: "" });
     } else {
-      DataService.postRequest("/sign-up", {
+      DataService.postRequest("/users", {
+        name: this.state.name,
         username: this.state.username,
         password: this.state.password
-      }).then(res => {
-        console.log(res);
-      });
+      })
+        .then(async res => {
+          if (!res.ok) {
+            const error = await res.json();
+            alert(error.message);
+            this.setState({ name: "" });
+            this.setState({ username: "" });
+            this.setState({ password: "" });
+            this.setState({ passwordRepeat: "" });
+          } else {
+            this.props.history.push("/login");
+          }
+        })
+        .catch(err => {
+          if (err.message.match(/Failed to fetch/)) {
+            alert("The server cannot be reached. Did you start it?");
+          } else {
+            alert(`Something went wrong during the sign up: ${err.message}`);
+          }
+        });
     }
   }
 
@@ -44,9 +67,17 @@ class SignUp extends Component {
     return (
       <BaseContainer>
         <FormContainer>
-          <Form>
+          <Form style={{ height: "470px" }}>
+            <Label>Name</Label>
+            <InputField
+              value={this.state.name}
+              onChange={e => {
+                this.handleInputChange("name", e.target.value);
+              }}
+            />
             <Label>Username</Label>
             <InputField
+              value={this.state.username}
               onChange={e => {
                 this.handleInputChange("username", e.target.value);
               }}
@@ -78,6 +109,7 @@ class SignUp extends Component {
               <Button
                 className="sign-up-button"
                 disabled={
+                  !this.state.name ||
                   !this.state.username ||
                   !this.state.password ||
                   !this.state.passwordRepeat
@@ -97,4 +129,4 @@ class SignUp extends Component {
   }
 }
 
-export default SignUp;
+export default withRouter(SignUp);
