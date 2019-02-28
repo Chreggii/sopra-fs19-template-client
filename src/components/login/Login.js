@@ -34,8 +34,8 @@ class Login extends React.Component {
   constructor() {
     super();
     this.state = {
-      name: null,
-      username: null
+      username: "",
+      password: ""
     };
   }
   /**
@@ -43,16 +43,23 @@ class Login extends React.Component {
    * If the request is successful, a new user is returned to the front-end and its token is stored in the localStorage.
    */
   login() {
-    DataService.postRequest("/users", {
+    DataService.postRequest("/login", {
       username: this.state.username,
-      name: this.state.name
+      password: this.state.password
     })
-      .then(returnedUser => {
-        const user = new User(returnedUser.json());
-        // store the token into the local storage
-        localStorage.setItem("token", user.token);
-        // user login successfully worked --> navigate to the route /game in the GameRouter
-        this.props.history.push(`/game`);
+      .then(async res => {
+        if (!res.ok) {
+          const error = await res.json();
+          alert(error.message);
+
+          this.setState({ username: "" });
+          this.setState({ password: "" });
+        } else {
+          const user = new User(await res.json());
+
+          localStorage.setItem("token", user.token);
+          this.props.history.push(`/game`);
+        }
       })
       .catch(err => {
         if (err.message.match(/Failed to fetch/)) {
@@ -73,8 +80,6 @@ class Login extends React.Component {
    * @param value (the value that gets assigned to the identified state key)
    */
   handleInputChange(key, value) {
-    // Example: if the key is username, this statement is the equivalent to the following one:
-    // this.setState({'username': value});
     this.setState({ [key]: value });
   }
 
@@ -94,21 +99,22 @@ class Login extends React.Component {
           <Form>
             <Label>Username</Label>
             <InputField
-              placeholder="Enter here.."
+              value={this.state.username}
               onChange={e => {
                 this.handleInputChange("username", e.target.value);
               }}
             />
-            <Label>Name</Label>
+            <Label>password</Label>
             <InputField
-              placeholder="Enter here.."
+              type="password"
+              value={this.state.password}
               onChange={e => {
-                this.handleInputChange("name", e.target.value);
+                this.handleInputChange("password", e.target.value);
               }}
             />
             <ButtonContainer>
               <Button
-                disabled={!this.state.username || !this.state.name}
+                disabled={!this.state.username || !this.state.password}
                 width="50%"
                 onClick={() => {
                   this.login();
