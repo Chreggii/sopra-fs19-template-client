@@ -107,7 +107,7 @@ class SignUp extends React.Component {
 
             <ButtonContainer>
               <Button
-                className="sign-up-button"
+                color="orange"
                 disabled={
                   !this.state.name ||
                   !this.state.username ||

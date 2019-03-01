@@ -123,7 +123,7 @@ class Login extends React.Component {
                 Login
               </Button>
               <Button
-                className="sign-up-button"
+                color="orange"
                 width="50%"
                 onClick={() => {
                   this.signUp();
