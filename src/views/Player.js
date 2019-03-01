@@ -2,6 +2,10 @@ import React from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
+  &:hover {
+    transform: translateY(-2px);
+  }
+  cursor: pointer;
   margin: 6px 0;
   width: 280px;
   padding: 10px;
@@ -35,9 +39,13 @@ const Id = styled.div`
  * https://reactjs.org/docs/components-and-props.html
  * @FunctionalComponent
  */
-const Player = ({ user }) => {
+const Player = ({ showUser, user }) => {
   return (
-    <Container>
+    <Container
+      onClick={() => {
+        showUser();
+      }}
+    >
       <Name>{user.name}</Name> <UserName>{user.username}</UserName>
       <Id>Id: {user.id}</Id>
     </Container>

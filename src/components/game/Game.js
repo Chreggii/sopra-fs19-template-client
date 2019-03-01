@@ -1,11 +1,12 @@
 import React from "react";
-import styled from "styled-components";
-import { BaseContainer } from "../../helpers/layout";
-import { getDomain } from "../../helpers/getDomain";
-import Player from "../../views/Player";
-import { Spinner } from "../../views/design/Spinner";
-import { Button } from "../../views/design/Button";
 import { withRouter } from "react-router-dom";
+import styled from "styled-components";
+
+import { getDomain } from "../../helpers/getDomain";
+import { BaseContainer } from "../../helpers/layout";
+import { Button } from "../../views/design/Button";
+import { Spinner } from "../../views/design/Spinner";
+import Player from "../../views/Player";
 
 const Container = styled(BaseContainer)`
   color: white;
@@ -30,6 +31,10 @@ class Game extends React.Component {
     this.state = {
       users: null
     };
+  }
+
+  showUser(id) {
+    this.props.history.push(`/user/${id}`);
   }
 
   logout() {
@@ -72,7 +77,12 @@ class Game extends React.Component {
               {this.state.users.map(user => {
                 return (
                   <PlayerContainer key={user.id}>
-                    <Player user={user} />
+                    <Player
+                      user={user}
+                      showUser={() => {
+                        this.showUser(user.id);
+                      }}
+                    />
                   </PlayerContainer>
                 );
               })}

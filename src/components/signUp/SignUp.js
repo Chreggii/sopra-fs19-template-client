@@ -4,7 +4,7 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 
 import { BaseContainer } from "../../helpers/layout";
-import DataService from "../../services/HttpService";
+import DataService from "../../services/DataService";
 import { Button } from "../../views/design/Button";
 import {
   ButtonContainer,
@@ -20,6 +20,7 @@ class SignUp extends React.Component {
     this.state = {
       name: "",
       username: "",
+      birthday: "",
       password: "",
       passwordRepeat: "",
       passwordNotIdentical: false
@@ -39,6 +40,7 @@ class SignUp extends React.Component {
       DataService.postRequest("/users", {
         name: this.state.name,
         username: this.state.username,
+        birthday: this.state.birthday,
         password: this.state.password
       })
         .then(async res => {
@@ -47,6 +49,7 @@ class SignUp extends React.Component {
             alert(error.message);
             this.setState({ name: "" });
             this.setState({ username: "" });
+            this.setState({ birthday: "" });
             this.setState({ password: "" });
             this.setState({ passwordRepeat: "" });
           } else {
@@ -67,7 +70,7 @@ class SignUp extends React.Component {
     return (
       <BaseContainer>
         <FormContainer>
-          <Form style={{ height: "470px" }}>
+          <Form style={{ height: "560px" }}>
             <Label>Name</Label>
             <InputField
               value={this.state.name}
@@ -80,6 +83,14 @@ class SignUp extends React.Component {
               value={this.state.username}
               onChange={e => {
                 this.handleInputChange("username", e.target.value);
+              }}
+            />
+            <Label>B-Day</Label>
+            <InputField
+              type="date"
+              value={this.state.birthday}
+              onChange={e => {
+                this.handleInputChange("birthday", e.target.value);
               }}
             />
             <Label>Password</Label>
@@ -112,7 +123,8 @@ class SignUp extends React.Component {
                   !this.state.name ||
                   !this.state.username ||
                   !this.state.password ||
-                  !this.state.passwordRepeat
+                  !this.state.passwordRepeat ||
+                  !this.state.birthday
                 }
                 width="50%"
                 onClick={() => {

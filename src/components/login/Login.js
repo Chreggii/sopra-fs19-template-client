@@ -2,7 +2,7 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 
 import { BaseContainer } from "../../helpers/layout";
-import DataService from "../../services/HttpService";
+import DataService from "../../services/DataService";
 import { Button } from "../../views/design/Button";
 import {
   ButtonContainer,
