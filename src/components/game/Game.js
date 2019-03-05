@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 import { getDomain } from "../../helpers/getDomain";
 import { BaseContainer } from "../../helpers/layout";
+import DataService from "../../services/DataService";
 import { Button } from "../../views/design/Button";
 import { Spinner } from "../../views/design/Spinner";
 import Player from "../../views/Player";
@@ -38,8 +39,25 @@ class Game extends React.Component {
   }
 
   logout() {
-    localStorage.removeItem("token");
-    this.props.history.push("/login");
+    DataService.postRequest("/logout", {
+      token: localStorage.getItem("token")
+    })
+      .then(async res => {
+        if (res.status === 204) {
+          localStorage.removeItem("token");
+          this.props.history.push("/login");
+        } else {
+          const error = await res.json();
+          alert(error.message);
+        }
+      })
+      .catch(err => {
+        if (err.message.match(/Failed to fetch/)) {
+          alert("The server cannot be reached. Did you start it?");
+        } else {
+          alert(`Something went wrong during the sign up: ${err.message}`);
+        }
+      });
   }
 
   componentDidMount() {
