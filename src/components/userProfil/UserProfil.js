@@ -24,6 +24,17 @@ class UserProfil extends Component {
   };
 
   componentDidMount() {
+    this.fetchUserDate();
+  }
+
+  handleCloseModal(successful) {
+    this.setState({ showEditDialog: false });
+    if (successful) {
+      this.fetchUserDate();
+    }
+  }
+
+  fetchUserDate() {
     const { id } = this.props.match.params;
 
     DataService.getRequest(`/users/${id}`)
@@ -100,7 +111,10 @@ class UserProfil extends Component {
                   </Button>
                 </ButtonToolbar>
                 {this.state.showEditDialog ? (
-                  <EditUserDialog user={this.getUser()} />
+                  <EditUserDialog
+                    user={this.getUser()}
+                    onClose={evt => this.handleCloseModal(evt)}
+                  />
                 ) : null}
               </React.Fragment>
             ) : null}

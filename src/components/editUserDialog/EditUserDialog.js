@@ -18,6 +18,7 @@ class EditUserDialog extends Component {
 
   handleClose() {
     this.setState({ show: false });
+    this.props.onClose(false);
   }
 
   handleInputChange(key, value) {
@@ -28,16 +29,25 @@ class EditUserDialog extends Component {
     DataService.putRequest(`/users/${this.state.user.id}`, {
       username: this.state.username,
       birthday: this.state.birthday
-    }).then(async res => {
-      if (res.status === 204) {
-        this.setState({ show: false });
-      } else {
-        const error = await res.json();
-        alert(error.message);
-        this.setState({ username: "" });
-        this.setState({ birthday: "" });
-      }
-    });
+    })
+      .then(async res => {
+        if (res.status === 204) {
+          this.setState({ show: false });
+          this.props.onClose(true);
+        } else {
+          const error = await res.json();
+          alert(error.message);
+          this.setState({ username: "" });
+          this.setState({ birthday: "" });
+        }
+      })
+      .catch(err => {
+        if (err.message.match(/Failed to fetch/)) {
+          alert("The server cannot be reached. Did you start it?");
+        } else {
+          alert(`Something went wrong during the sign up: ${err.message}`);
+        }
+      });
   }
 
   handleShow() {
