@@ -17,18 +17,7 @@ const Container = styled.div`
 
 const UserName = styled.div`
   font-weight: lighter;
-  margin-left: 5px;
-`;
-
-const Name = styled.div`
-  font-weight: bold;
-  color: #06c4ff;
-`;
-
-const Id = styled.div`
-  margin-left: auto;
-  margin-right: 10px;
-  font-weight: bold;
+  margin: 0 auto;
 `;
 
 /**
@@ -46,8 +35,7 @@ const Player = ({ showUser, user }) => {
         showUser();
       }}
     >
-      <Name>{user.name}</Name> <UserName>{user.username}</UserName>
-      <Id>Id: {user.id}</Id>
+      <UserName>{user.username}</UserName>
     </Container>
   );
 };
