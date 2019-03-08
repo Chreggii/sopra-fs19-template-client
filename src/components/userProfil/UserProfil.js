@@ -45,10 +45,21 @@ class UserProfil extends Component {
           this.props.history.push("/game");
         } else {
           const user = new User(await res.json());
-          this.setState({
-            canEdit: localStorage.getItem("token") === user.token
-          });
           this.setState({ user });
+
+          DataService.postRequest(`/edit`, {
+            id: id,
+            token: localStorage.getItem("token")
+          }).then(async res => {
+            if (!res.ok) {
+              const error = await res.json();
+              alert(error.message);
+            } else {
+              this.setState({
+                canEdit: await res.json()
+              });
+            }
+          });
         }
       })
       .catch(err => {
