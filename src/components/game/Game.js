@@ -43,13 +43,8 @@ class Game extends React.Component {
       token: localStorage.getItem("token")
     })
       .then(async res => {
-        if (res.status === 204) {
-          localStorage.removeItem("token");
-          this.props.history.push("/login");
-        } else {
-          const error = await res.json();
-          alert(error.message);
-        }
+        localStorage.removeItem("token");
+        this.props.history.push("/login");
       })
       .catch(err => {
         if (err.message.match(/Failed to fetch/)) {
