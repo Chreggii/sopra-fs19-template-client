@@ -1,12 +1,17 @@
 import { getDomain } from "../helpers/getDomain";
 
 export default class DataService {
+  static get headers() {
+    return {
+      "Content-Type": "application/json",
+      Authorization: localStorage.getItem("token")
+    };
+  }
+
   static getRequest(url) {
     return fetch(`${getDomain()}${url}`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json"
-      }
+      headers: this.headers
     });
   }
 
@@ -14,9 +19,7 @@ export default class DataService {
     console.log("Post data: ", JSON.stringify(data)); //TODO CH: Remove
     return fetch(`${getDomain()}${url}`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: this.headers,
       body: JSON.stringify(data)
     });
   }
@@ -25,9 +28,7 @@ export default class DataService {
     console.log("Put data: ", JSON.stringify(data)); //TODO CH: Remove
     return fetch(`${getDomain()}${url}`, {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: this.headers,
       body: JSON.stringify(data)
     });
   }
