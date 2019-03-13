@@ -66,6 +66,7 @@ class EditUserDialog extends Component {
               <Form.Label>New username:</Form.Label>
               <Form.Control
                 type="text"
+                value={this.state.username}
                 onChange={e => {
                   this.handleInputChange("username", e.target.value);
                 }}
@@ -75,6 +76,7 @@ class EditUserDialog extends Component {
               <Form.Label>New birthday:</Form.Label>
               <Form.Control
                 type="date"
+                value={this.state.birthday}
                 onChange={e => {
                   this.handleInputChange("birthday", e.target.value);
                 }}
