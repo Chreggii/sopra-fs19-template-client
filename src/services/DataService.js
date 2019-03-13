@@ -16,7 +16,6 @@ export default class DataService {
   }
 
   static postRequest(url, data) {
-    console.log("Post data: ", JSON.stringify(data)); //TODO CH: Remove
     return fetch(`${getDomain()}${url}`, {
       method: "POST",
       headers: this.headers,
@@ -25,7 +24,6 @@ export default class DataService {
   }
 
   static putRequest(url, data) {
-    console.log("Put data: ", JSON.stringify(data)); //TODO CH: Remove
     return fetch(`${getDomain()}${url}`, {
       method: "PUT",
       headers: this.headers,

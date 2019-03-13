@@ -2,7 +2,6 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 import styled from "styled-components";
 
-import { getDomain } from "../../helpers/getDomain";
 import { BaseContainer } from "../../helpers/layout";
 import DataService from "../../services/DataService";
 import { Button } from "../../views/design/Button";
@@ -56,20 +55,17 @@ class Game extends React.Component {
   }
 
   componentDidMount() {
-    fetch(`${getDomain()}/users`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-      .then(response => response.json())
-      .then(async users => {
-        await new Promise(resolve => setTimeout(resolve, 800));
-
-        this.setState({ users });
+    DataService.getRequest(`/users`)
+      .then(async res => {
+        if (!res.ok) {
+          const error = await res.json();
+          alert(error.message);
+        } else {
+          const users = await res.json();
+          this.setState({ users });
+        }
       })
       .catch(err => {
-        console.log(err);
         alert("Something went wrong fetching the users: " + err);
       });
   }
