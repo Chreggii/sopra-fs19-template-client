@@ -47,10 +47,7 @@ class UserProfil extends Component {
           const user = new User(await res.json());
           this.setState({ user });
 
-          DataService.postRequest(`/edit`, {
-            id: id,
-            token: localStorage.getItem("token")
-          }).then(async res => {
+          DataService.postRequest(`/edit`, id).then(async res => {
             if (!res.ok) {
               const error = await res.json();
               alert(error.message);
