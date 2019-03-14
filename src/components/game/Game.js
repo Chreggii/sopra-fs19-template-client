@@ -38,9 +38,7 @@ class Game extends React.Component {
   }
 
   logout() {
-    DataService.postRequest("/logout", {
-      token: localStorage.getItem("token")
-    })
+    DataService.postRequest("/logout")
       .then(async res => {
         localStorage.removeItem("token");
         this.props.history.push("/login");
