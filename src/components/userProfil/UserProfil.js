@@ -27,6 +27,7 @@ class UserProfil extends Component {
     this.fetchUserDate();
   }
 
+  // Callback when edit form is closed
   handleCloseModal(successful) {
     this.setState({ showEditDialog: false });
     if (successful) {
@@ -34,9 +35,11 @@ class UserProfil extends Component {
     }
   }
 
+  // Gets the user date about the specific user
   fetchUserDate() {
     const { id } = this.props.match.params;
 
+    // Gets the user data
     DataService.getRequest(`/users/${id}`)
       .then(async res => {
         if (!res.ok) {
@@ -47,6 +50,7 @@ class UserProfil extends Component {
           const user = new User(await res.json());
           this.setState({ user });
 
+          // Afterwards check if the user is editable
           DataService.postRequest(`/edit`, id).then(async res => {
             if (!res.ok) {
               const error = await res.json();
@@ -68,6 +72,7 @@ class UserProfil extends Component {
       });
   }
 
+  // Formats the datetime and return the formated datetime.
   formatDate(dateTime) {
     const date = new Date(dateTime);
     const day = date.getDate();

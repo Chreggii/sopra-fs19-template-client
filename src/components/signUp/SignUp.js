@@ -14,6 +14,10 @@ import {
   Label
 } from "../../views/design/Form";
 
+/**
+ * Sign up view. Which allows a user to register.
+ * @Class
+ */
 class SignUp extends React.Component {
   constructor() {
     super();
@@ -31,12 +35,15 @@ class SignUp extends React.Component {
     this.setState({ [key]: value });
   }
 
+  // When clicking the sign up button
   signUp() {
     if (this.state.password !== this.state.passwordRepeat) {
+      // Reset form if passwords not identically
       this.setState({ passwordNotIdentical: true });
       this.setState({ password: "" });
       this.setState({ passwordRepeat: "" });
     } else {
+      // Register new user on server
       DataService.postRequest("/users", {
         name: this.state.name,
         username: this.state.username,
@@ -45,6 +52,7 @@ class SignUp extends React.Component {
       })
         .then(async res => {
           if (!res.ok) {
+            // Show error and reset form
             const error = await res.json();
             alert(error.message);
             this.setState({ name: "" });
@@ -53,6 +61,7 @@ class SignUp extends React.Component {
             this.setState({ password: "" });
             this.setState({ passwordRepeat: "" });
           } else {
+            // Browse to login views
             this.props.history.push("/login");
           }
         })

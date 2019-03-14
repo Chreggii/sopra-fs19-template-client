@@ -16,6 +16,7 @@ class EditUserDialog extends Component {
     };
   }
 
+  // When closing the dialog
   handleClose() {
     this.setState({ show: false });
     this.props.onClose(false);
@@ -35,6 +36,7 @@ class EditUserDialog extends Component {
           this.setState({ show: false });
           this.props.onClose(true);
         } else {
+          // Show error message and reset input fields
           const error = await res.json();
           alert(error.message);
           this.setState({ username: "" });

@@ -33,13 +33,16 @@ class Game extends React.Component {
     };
   }
 
+  // Navigates to the specific user
   showUser(id) {
     this.props.history.push(`/user/${id}`);
   }
 
+  // When clicking the logout button
   logout() {
     DataService.postRequest("/logout")
       .then(async res => {
+        // Remove token from local storage and browse to login view
         localStorage.removeItem("token");
         this.props.history.push("/login");
       })
@@ -53,9 +56,11 @@ class Game extends React.Component {
   }
 
   componentDidMount() {
+    // Get all users
     DataService.getRequest(`/users`)
       .then(async res => {
         if (!res.ok) {
+          // Show error message if status NOT 200
           const error = await res.json();
           alert(error.message);
         } else {

@@ -1,6 +1,11 @@
 import { getDomain } from "../helpers/getDomain";
 
+/**
+ * Data service which handles all the http calls.
+ * @Class
+ */
 export default class DataService {
+  // Returns the http header
   static get headers() {
     return {
       "Content-Type": "application/json",
@@ -8,6 +13,7 @@ export default class DataService {
     };
   }
 
+  // Get request
   static getRequest(url) {
     return fetch(`${getDomain()}${url}`, {
       method: "GET",
@@ -15,6 +21,7 @@ export default class DataService {
     });
   }
 
+  // Post request
   static postRequest(url, data) {
     return fetch(`${getDomain()}${url}`, {
       method: "POST",
@@ -23,6 +30,7 @@ export default class DataService {
     });
   }
 
+  // Put request
   static putRequest(url, data) {
     return fetch(`${getDomain()}${url}`, {
       method: "PUT",

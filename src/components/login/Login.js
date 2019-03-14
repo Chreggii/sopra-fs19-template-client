@@ -47,6 +47,7 @@ class Login extends React.Component {
     })
       .then(async res => {
         if (!res.ok) {
+          // Show error message and reset login form
           const error = await res.json();
           alert(error.message);
 
@@ -55,6 +56,7 @@ class Login extends React.Component {
         } else {
           const user = new User(await res.json());
 
+          // Save passed token in local storage and browse to game view
           localStorage.setItem("token", user.token);
           this.props.history.push(`/game`);
         }
@@ -69,6 +71,7 @@ class Login extends React.Component {
   }
 
   signUp() {
+    // Browse to sing up view
     this.props.history.push("/sign-up");
   }
 
