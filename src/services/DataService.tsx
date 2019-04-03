@@ -5,16 +5,8 @@ import { getDomain } from "../helpers/getDomain";
  * @Class
  */
 export default class DataService {
-  // Returns the http header
-  static get headers() {
-    return {
-      "Content-Type": "application/json",
-      Authorization: localStorage.getItem("token")
-    };
-  }
-
   // Get request
-  static getRequest(url) {
+  static getRequest(url: string) {
     return fetch(`${getDomain()}${url}`, {
       method: "GET",
       headers: this.headers
@@ -22,7 +14,7 @@ export default class DataService {
   }
 
   // Post request
-  static postRequest(url, data) {
+  static postRequest(url: string, data: any) {
     return fetch(`${getDomain()}${url}`, {
       method: "POST",
       headers: this.headers,
@@ -31,11 +23,22 @@ export default class DataService {
   }
 
   // Put request
-  static putRequest(url, data) {
+  static putRequest(url: string, data: any) {
     return fetch(`${getDomain()}${url}`, {
       method: "PUT",
       headers: this.headers,
       body: JSON.stringify(data)
     });
+  }
+
+  // Returns the http header
+  private static get headers(): Headers {
+    const token: string = localStorage.getItem("token") || "";
+
+    const headers = new Headers();
+    headers.set("Content-Type", "application/json");
+    headers.set("Authorization", token);
+
+    return headers;
   }
 }
